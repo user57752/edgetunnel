@@ -21,6 +21,13 @@ jobs:
       - name: Instll Dependencies
         run: npm install -g javascript-obfuscator
 
+      - name: Check backup file
+         run: |
+          if [ ! -f _worker.js.backup ]; then
+            echo "The backup file _worker.js.backup doesn't exist，creating..."
+            cp _worker.js _worker.js.backup
+          fi
+
       - name: Load raw file
         run: |
           curl -o _oworker.js https://raw.githubusercontent.com/user57752/edge_for_deploy/main/_oworker.js
@@ -57,6 +64,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
+
 
 
 
