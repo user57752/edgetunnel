@@ -1,4 +1,4 @@
-name: 混淆最新版本源码
+name: Obfuscate latest code
 on:
     workflow_dispatch:
 
@@ -13,21 +13,21 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 使用 Node.js
+      - name: Use Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "16"
 
-      - name: 安装依赖
+      - name: Instll Dependencies
         run: npm install -g javascript-obfuscator
 
-      - name: 加载源码
+      - name: Load raw file
         run: |
-          curl -o 明文源码.js https://raw.githubusercontent.com/usr57752/edge_for_deploy/main/_oworker.js
+          curl -o _oworker.js https://raw.githubusercontent.com/usr57752/edge_for_deploy/main/_oworker.js
 
-      - name: 混淆代码
+      - name: Obfuscate code
         run: |
-          javascript-obfuscator 明文源码.js --output _worker.js \
+          javascript-obfuscator _oworker.js --output _worker.js \
           --compact true \
           --control-flow-flattening true \
           --control-flow-flattening-threshold 1 \
@@ -41,21 +41,22 @@ jobs:
           --transform-object-keys true \
           --unicode-escape-sequence true
 
-      - name: 提交更改
+      - name: Commit change
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add _worker.js _worker.js.backup
           if git diff --cached --quiet; then
-            echo "没有文件更改，跳过提交"
+            echo "No files has changed, skip"
           else
-            git commit -m "混淆 _worker.js 文件并备份原文件"
+            git commit -m "Obfuscate _worker.js"
           fi
 
-      - name: 推送更改
+      - name: Push changes 
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
+
 
 
