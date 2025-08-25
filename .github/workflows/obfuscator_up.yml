@@ -21,13 +21,6 @@ jobs:
       - name: 安装依赖
         run: npm install -g javascript-obfuscator
 
-      - name: 检查备份文件是否存在
-        run: |
-          if [ ! -f _worker.js.backup ]; then
-            echo "备份文件 _worker.js.backup 不存在，正在创建..."
-            cp _worker.js _worker.js.backup
-          fi
-
       - name: 加载源码
         run: |
           curl -o 明文源码.js https://raw.githubusercontent.com/usr57752/edge_for_deploy/main/_oworker.js
@@ -64,4 +57,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
+
 
