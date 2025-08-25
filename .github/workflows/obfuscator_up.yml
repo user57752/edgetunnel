@@ -21,13 +21,6 @@ jobs:
       - name: Instll Dependencies
         run: npm install -g javascript-obfuscator
 
-      - name: Check backup file
-        run: |
-          if [ ! -f _worker.js.backup ]; then
-            echo "The backup file _worker.js.backup doesn't exist，creating..."
-            cp _worker.js _worker.js.backup
-          fi
-
       - name: Load raw file
         run: |
           curl -o _oworker.js https://raw.githubusercontent.com/user57752/edge_for_deploy/main/_oworker.js
@@ -53,10 +46,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add _worker.js _worker.js.backup
-          if git diff --cached --quiet; then
-            echo "No files has changed, skip"
-          else
-            git commit -m "Obfuscate _worker.js"
+          git commit -m "Obfuscate _worker.js"
           fi
 
       - name: Push changes 
@@ -64,6 +54,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
+
 
 
 
